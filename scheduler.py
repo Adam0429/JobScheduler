@@ -5,8 +5,8 @@ import os
 import sys
 import argparse
 from datetime import datetime
+from settings import job_path
 
-job_path = './Jobs'
 sys.path.append(job_path)
 
 scheduler = schedule.Scheduler()
