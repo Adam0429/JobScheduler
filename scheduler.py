@@ -28,7 +28,10 @@ if __name__ == '__main__':
     load_jobs()
     while True:
         if args.one_day_life:
-            datetime.now()
+            print('24点以后自动退出')
+            if datetime.now() > end_time:
+                print('退出程序')
+                sys.exit()
         scheduler.run_pending()
         time.sleep(1)
 
