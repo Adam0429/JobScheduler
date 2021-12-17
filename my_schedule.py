@@ -526,26 +526,25 @@ class Job(object):
         else:
             self.next_run = datetime.datetime.now() + self.period
 
-
-        if self.start_day is not None:
-            if self.unit != 'weeks':
-                raise ScheduleValueError('`unit` should be \'weeks\'')
-            weekdays = (
-                'monday',
-                'tuesday',
-                'wednesday',
-                'thursday',
-                'friday',
-                'saturday',
-                'sunday'
-            )
-            if self.start_day not in weekdays:
-                raise ScheduleValueError('Invalid start day')
-            weekday = weekdays.index(self.start_day)
-            days_ahead = weekday - self.next_run.weekday()
-            if days_ahead <= 0:  # Target day already happened this week
-                days_ahead += 7
-            self.next_run += datetime.timedelta(days_ahead) - self.period
+        # if self.start_day is not None:
+        #     if self.unit != 'weeks':
+        #         raise ScheduleValueError('`unit` should be \'weeks\'')
+        #     weekdays = (
+        #         'monday',
+        #         'tuesday',
+        #         'wednesday',
+        #         'thursday',
+        #         'friday',
+        #         'saturday',
+        #         'sunday'
+        #     )
+        #     if self.start_day not in weekdays:
+        #         raise ScheduleValueError('Invalid start day')
+        #     weekday = weekdays.index(self.start_day)
+        #     days_ahead = weekday - self.next_run.weekday()
+        #     if days_ahead <= 0:  # Target day already happened this week
+        #         days_ahead += 7
+        #     self.next_run += datetime.timedelta(days_ahead) - self.period
         if self.at_time is not None:
             if (self.unit not in ('days', 'hours', 'minutes')
                     and self.start_day is None):
@@ -563,6 +562,9 @@ class Job(object):
             # Make sure we run at the specified time *today* (or *this hour*)
             # as well. This accounts for when a job takes so long it finished
             # in the next period.
+            # 如果第一次跑 或者 运行时间已经超过一个间隔了（如果间隔是1天，超过24小时之内都不会执行） 
+            # 这时会将下次运行时间提前一个周期，说明此时就要立即开始运行一次
+
             if not self.last_run \
                     or (self.next_run - self.last_run) > self.period:
                 now = datetime.datetime.now()
@@ -585,7 +587,6 @@ class Job(object):
             if (self.next_run - datetime.datetime.now()).days >= 7:
                 self.next_run -= self.period
         print(self.name,'下次运行时间:',self.next_run)
-
 # The following methods are shortcuts for not having to
 # create a Scheduler instance:
 
