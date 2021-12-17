@@ -1,4 +1,4 @@
-# JobSchedule
+# JobScheduler
 
 和 https://github.com/Adam0429/TaskManager 类似，是基于通过修改python schedule库实现功能的。
 * 可以设置定时任务
