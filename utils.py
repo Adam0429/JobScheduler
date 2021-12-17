@@ -22,5 +22,5 @@ def dingmessage(text):
         }
     }
     message_json = json.dumps(message)
-    requests.post(url=webhook, data=message_json, headers=header)
-    # print(text)
+    response = requests.post(url=webhook, data=message_json, headers=header)
+    # print(response.text)
