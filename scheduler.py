@@ -18,6 +18,7 @@ def load_jobs():
     job_files = glob(os.path.join(job_path, '*.py'))
     for job_file in job_files:
         filepath,filename = os.path.split(job_file)
+        # print(f"from {filename.replace('.py', '')} import job")
         exec(f"from {filename.replace('.py', '')} import job")
         scheduler.jobs.append(eval(f"job"))
 
@@ -29,20 +30,22 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='TaskSchedule')
     parser.add_argument('--one_day_life',action='store_true', help='在24点结束运行')
     args = parser.parse_args()
-    load_jobs()
-    if args.one_day_life:
-        print('24点以后自动退出')
-    while True:
-        if args.one_day_life:
-            # print('当前时间:',datetime.now())
-            # print('结束时间:',end_time)
-            if datetime.now() > end_time:
-                print('退出程序')
-                dingmessage('数据同步程序关闭')
-                time.sleep(10)
-                sys.exit()
-        scheduler.run_pending()
-        time.sleep(1)
-
+    try:
+	    load_jobs()
+	    if args.one_day_life:
+	        print('24点以后自动退出')
+	    while True:
+	        if args.one_day_life:
+	            # print('当前时间:',datetime.now())
+	            # print('结束时间:',end_time)
+	            if datetime.now() > end_time:
+	                print('退出程序')
+	                dingmessage('数据同步程序关闭')
+	                time.sleep(10)
+	                sys.exit()
+	        scheduler.run_pending()
+	        time.sleep(1)
+	except Exception as e:
+		dingmessage('数据同步程序出错!'+str(e))
 
 
