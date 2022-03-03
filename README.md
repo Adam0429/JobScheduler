@@ -1,10 +1,10 @@
 # JobScheduler
 
 和 https://github.com/Adam0429/TaskManager 类似，是基于通过修改python schedule库实现功能的。
-* 可以设置定时任务
-* 有消息提示
-* 但更容易部署。
-
+* 也可以设置定时任务
+* 也有消息提示
+* 更容易部署。
+* 不支持异步调用。
 
 *  单单在crontab中设置定时任务也不便于代码统一结构
 *  使用tmux开后台还是怕断电
